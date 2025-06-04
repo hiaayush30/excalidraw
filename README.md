@@ -1,3 +1,7 @@
+![alt text](image.png)
+![alt text](image-1.png)
+
+- use workspace:* for pnpm , * for npm in dependencies
 # Turborepo starter
 
 This Turborepo starter is maintained by the Turborepo core team.
@@ -9,7 +13,6 @@ Run the following command:
 ```sh
 npx create-turbo@latest
 ```
-
 ## What's inside?
 
 This Turborepo includes the following packages/apps:
