@@ -1,5 +1,5 @@
 import WebSocket, { WebSocketServer } from "ws";
-import jwt from "jsonwebtoken";
+import jwt, { JwtPayload } from "jsonwebtoken";
 
 const ws = new WebSocketServer({
     port: 5000
@@ -14,8 +14,8 @@ ws.on("connection", (socket: WebSocket, request) => {
     const queryParams = new URLSearchParams(url.split('?')[1]);
     const token = queryParams.get("token") ?? "";
     try {
-        const decoded = jwt.verify(token, process.env.JWT_SECRET as string) as { userId: string };
-        const userId = decoded.userId;
+        const decoded = jwt.verify(token, process.env.JWT_SECRET as string);
+        const userId = (decoded as JwtPayload).userId;
         if (!userId) {
             socket.close();
             return;
