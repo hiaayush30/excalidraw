@@ -20,6 +20,7 @@ export const authMiddleware = (req: Request, res: Response, next: NextFunction):
             });
             return;
         } else {
+            //@ts-ignore
             req.userId = (decoded as JwtPayload).userId;
             next();
         }

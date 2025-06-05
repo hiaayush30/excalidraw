@@ -4,7 +4,6 @@ import userRouter from "./routes/user.route";
 const app = express();
 app.use(express.json());
 
-
 app.get("/api/check",(req,res)=>{
     res.json({
         message:"http server running"
