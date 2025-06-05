@@ -1,5 +1,6 @@
+import { JWT_SECRET } from "@repo/backend-common/config";
 import { NextFunction, Request, Response } from "express";
-import jwt from "jsonwebtoken";
+import jwt, { JwtPayload } from "jsonwebtoken";
 
 
 export const authMiddleware = (req: Request, res: Response, next: NextFunction): void => {
@@ -12,16 +13,16 @@ export const authMiddleware = (req: Request, res: Response, next: NextFunction):
             return;
         }
 
-        const decoded = jwt.verify(token, process.env.JWT_SECRET as string) as { userId: string };
-        if (!decoded.userId) {
+        const decoded = jwt.verify(token, JWT_SECRET);
+        if (!(decoded as JwtPayload).userId) {
             res.status(403).json({
                 error: "Unauthorized | invalid token"
             });
             return;
+        } else {
+            req.userId = (decoded as JwtPayload).userId;
+            next();
         }
-
-        req.userId = decoded.userId;
-        next();
     } catch (error) {
         res.status(403).json({
             error: "Unauthorized | invalid token"
