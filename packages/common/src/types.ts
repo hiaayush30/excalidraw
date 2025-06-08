@@ -1,18 +1,19 @@
-import {z} from "zod";
+import { z } from "zod";
+import { email } from "zod/v4";
 
 export const CreateUserSchema = z.object({
-    username:z.string().min(3,{
-        message:"username must be of atleast 3 characters"
+    name: z.string().min(3, {
+        message: "name must be of atleast 3 characters"
     }),
-    password:z.string(),
-    name:z.string()
+    password: z.string(),
+    email: z.string()
 })
 
 export const SigninSchema = z.object({
-    username:z.string(),
-    password:z.string()
+    email: z.string(),
+    password: z.string()
 })
 
 export const CreateRoomSchema = z.object({
-    name:z.string().min(3).max(20)
+    name: z.string().min(3).max(20)
 })

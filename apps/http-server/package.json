@@ -14,7 +14,8 @@
     "@repo/backend-common": "workspace:*",
     "bcryptjs": "^3.0.2",
     "express": "^5.1.0",
-    "jsonwebtoken": "^9.0.2"
+    "jsonwebtoken": "^9.0.2",
+    "@repo/db":"workspace:*"
   },
   "author": "",
   "license": "ISC",
