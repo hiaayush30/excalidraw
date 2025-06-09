@@ -141,6 +141,9 @@ importers:
       '@repo/typescript-config':
         specifier: workspace:*
         version: link:../typescript-config
+      typescript:
+        specifier: ^5.x.x
+        version: 5.8.2
 
   packages/db:
     dependencies:
