@@ -5,7 +5,7 @@ import jwt, { JwtPayload } from "jsonwebtoken";
 
 export const authMiddleware = (req: Request, res: Response, next: NextFunction): void => {
     try {
-        const token = req.headers["authorization"]?.split(" ")[1]; // assuming Bearer token
+        const token = req.headers["authorization"];
         if (!token) {
             res.status(403).json({
                 error: "Unauthorized | token required"
@@ -13,7 +13,7 @@ export const authMiddleware = (req: Request, res: Response, next: NextFunction):
             return;
         }
 
-        const decoded = jwt.verify(token, JWT_SECRET);
+        const decoded = jwt.verify(token as string, JWT_SECRET);
         if (!(decoded as JwtPayload).userId) {
             res.status(403).json({
                 error: "Unauthorized | invalid token"

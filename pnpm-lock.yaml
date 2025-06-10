@@ -141,14 +141,11 @@ importers:
       '@repo/typescript-config':
         specifier: workspace:*
         version: link:../typescript-config
-      typescript:
-        specifier: ^5.x.x
-        version: 5.8.2
 
   packages/db:
     dependencies:
       '@prisma/client':
-        specifier: 6.9.0
+        specifier: ^6.9.0
         version: 6.9.0(prisma@6.9.0(typescript@5.8.2))(typescript@5.8.2)
       prisma:
         specifier: ^6.9.0
