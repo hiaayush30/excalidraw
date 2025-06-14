@@ -12,7 +12,8 @@
   "dependencies": {
     "jsonwebtoken": "^9.0.2",
     "ws": "^8.18.2",
-    "@repo/backend-common": "workspace:*"
+    "@repo/backend-common": "workspace:*",
+    "@repo/db":"workpace:*"
   },
   "keywords": [],
   "author": "",

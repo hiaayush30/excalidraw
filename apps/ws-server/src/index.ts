@@ -6,29 +6,108 @@ const ws = new WebSocketServer({
     port: 5000
 })
 
+type UserType = {
+    userId: string;
+    rooms: Array<string>;
+    ws: WebSocket
+}
+
+type MessageType = {
+    type: string,
+    roomId?: string;
+    message?: string;
+}
+
+let users: UserType[] = []
+
+const checkUserId = (token: string): string | null => {
+    try {
+        if (token.length === 0) {
+            return null;
+        }
+        const decoded = jwt.verify(token, JWT_SECRET);
+        if (typeof decoded == "string") {
+            return null;
+        }
+        const userId = (decoded as JwtPayload).userId;
+        if (!userId) {
+            return null;
+        }
+        return userId;
+    } catch (error) {
+        return null;
+    }
+}
+
 ws.on("connection", (socket: WebSocket, request) => {
+    console.log("client connected");
+
     //getting token in url param and decoding it
     const url = request.url;
     if (!url) {
+        socket.close();
         return;
     }
     const queryParams = new URLSearchParams(url.split('?')[1]);
     const token = queryParams.get("token") ?? "";
-    try {
-        const decoded = jwt.verify(token, JWT_SECRET);
-        const userId = (decoded as JwtPayload).userId;
-        if (!userId) {
-            socket.close();
-            return;
-        }
-        socket.on("message", (data) => {
-            console.log("recieved:" + data);
-            socket.send("pong");
-        })
-    } catch (error) {
-        console.error("error in decoding token:", error);
+    const userId = checkUserId(token);
+    if (!userId) {
+        socket.close();
         return;
     }
-    console.log("client connected");
-    socket.send("hello there");
+
+    //main part
+    users.push({
+        userId: userId,
+        rooms: [],
+        ws: socket
+    })
+    console.log("user added");
+    socket.on("message", (message) => {
+        const data: MessageType = JSON.parse(message as unknown as string);
+        if (!data.type) return;
+
+        if (data.type == "join_room") {
+            if (!data.roomId) return;
+
+            const user = users.find(user => user.ws == socket);
+            if (!user) return socket.send(JSON.stringify({ error: "user not found" }));
+            user.rooms.push(data.roomId);
+            socket.send("joined room");
+        }
+        else if (data.type == "leave_room") {
+            if (!data.roomId) return;
+
+            const user = users.find(user => user.ws == socket);
+            if (!user) return socket.send(JSON.stringify({ error: "user not found" }));
+            user.rooms = user.rooms.filter(room => room !== data.roomId);
+            socket.send("room left");
+        }
+
+        else if(data.type == "chat") {
+            if(!data.message || !data.roomId) return;
+
+            const user = users.find(user=>user.ws==socket);
+            if(!user || !user.rooms.includes(data.roomId)){
+                return socket.send(JSON.stringify({
+                    error:"user not found | room not found"
+                }))
+            }
+            const targetUsers = users.filter(user=>user.rooms.includes(data.roomId as string));
+            targetUsers.forEach((user)=>{
+                if(user.ws!==socket){
+                    user.ws.send(JSON.stringify({
+                        type:"chat",
+                        message:data.message,
+                        roomId:data.roomId
+                    }))
+                }
+            })
+            socket.send("message sent");
+        }
+    })
+
+    socket.on("close", () => {
+        users = users.filter(user => user.userId !== userId)
+    })
 })
