@@ -1,26 +1,27 @@
 import WebSocket, { WebSocketServer } from "ws";
 import jwt, { JwtPayload } from "jsonwebtoken";
 import { JWT_SECRET } from "@repo/backend-common/config";
+import { prismaClient } from "@repo/db/client"
 
 const ws = new WebSocketServer({
     port: 5000
 })
 
 type UserType = {
-    userId: string;
-    rooms: Array<string>;
+    userId: number;
+    rooms: Array<number>;
     ws: WebSocket
 }
 
 type MessageType = {
     type: string,
-    roomId?: string;
+    roomId?: number;
     message?: string;
 }
 
 let users: UserType[] = []
 
-const checkUserId = (token: string): string | null => {
+const checkUserId = (token: string): number | null => {
     try {
         if (token.length === 0) {
             return null;
@@ -63,7 +64,7 @@ ws.on("connection", (socket: WebSocket, request) => {
         ws: socket
     })
     console.log("user added");
-    socket.on("message", (message) => {
+    socket.on("message", async (message) => {
         const data: MessageType = JSON.parse(message as unknown as string);
         if (!data.type) return;
 
@@ -84,22 +85,37 @@ ws.on("connection", (socket: WebSocket, request) => {
             socket.send("room left");
         }
 
-        else if(data.type == "chat") {
-            if(!data.message || !data.roomId) return;
+        else if (data.type == "chat") {
+            if (!data.message || !data.roomId) return;
 
-            const user = users.find(user=>user.ws==socket);
-            if(!user || !user.rooms.includes(data.roomId)){
+            const user = users.find(user => user.ws == socket);
+            //check if user is present in the room
+            if (!user || !user.rooms.includes(data.roomId)) {
                 return socket.send(JSON.stringify({
-                    error:"user not found | room not found"
+                    error: "user not found | room not found"
                 }))
             }
-            const targetUsers = users.filter(user=>user.rooms.includes(data.roomId as string));
-            targetUsers.forEach((user)=>{
-                if(user.ws!==socket){
+            try {
+                await prismaClient.chat.create({
+                    data: {
+                        roomId:Number(data.roomId),
+                        userId:Number(user.userId),
+                        message:data.message
+                    }
+                })
+            } catch (error) {
+                 socket.send(JSON.stringify({
+                    error:"failed to send chat"
+                 }));
+                 return;
+            }
+            const targetUsers = users.filter(user => user.rooms.includes(data.roomId as number));
+            targetUsers.forEach((user) => {
+                if (user.ws !== socket) {
                     user.ws.send(JSON.stringify({
-                        type:"chat",
-                        message:data.message,
-                        roomId:data.roomId
+                        type: "chat",
+                        message: data.message,
+                        roomId: data.roomId
                     }))
                 }
             })
