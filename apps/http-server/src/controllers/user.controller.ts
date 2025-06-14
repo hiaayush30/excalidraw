@@ -85,7 +85,7 @@ const signup = async (req: Request, res: Response): Promise<any> => {
     }
 }
 
-const room = async (req: Request, res: Response):Promise<any> => {
+const room = async (req: Request, res: Response): Promise<any> => {
     try {
         const parsedData = CreateRoomSchema.safeParse(req.body);
         if (!parsedData.success) {
@@ -121,8 +121,34 @@ const room = async (req: Request, res: Response):Promise<any> => {
     }
 }
 
+const getChats = async (req: Request, res: Response): Promise<any> => {
+    try {
+        const { roomId } = req.params;
+        if (!roomId) return res.status(403).json({ error: "invalid request" })
+        const chats = await prismaClient.chat.findMany({
+            where: {
+                roomId: Number(roomId),
+            },
+            orderBy: {
+                createdAt: "desc"   //latest first
+                // the chat messages will be sorted from the latest time they were created to the oldest.             
+            },
+            take: 50    
+        })
+        return res.status(200).json({
+            chats
+        })
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({
+            error: "Internal server error | could not fetch chats"
+        })
+    }
+}
+
 export {
     login,
     signup,
-    room
+    room,
+    getChats
 }
