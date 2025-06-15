@@ -1,102 +1,85 @@
-import Image, { type ImageProps } from "next/image";
-import { Button } from "@repo/ui/button";
-import styles from "./page.module.css";
+import Link from "next/link"
+import { Button } from "@repo/ui/components/button"
+import { Palette, Users, Brush, Sparkles } from "lucide-react"
 
-type Props = Omit<ImageProps, "src"> & {
-  srcLight: string;
-  srcDark: string;
-};
-
-const ThemeImage = (props: Props) => {
-  const { srcLight, srcDark, ...rest } = props;
-
+export default function HomePage() {
   return (
-    <>
-      <Image {...rest} src={srcLight} className="imgLight" />
-      <Image {...rest} src={srcDark} className="imgDark" />
-    </>
-  );
-};
-
-export default function Home() {
-  return (
-    <div className={styles.page}>
-      <main className={styles.main}>
-        <ThemeImage
-          className={styles.logo}
-          srcLight="turborepo-dark.svg"
-          srcDark="turborepo-light.svg"
-          alt="Turborepo logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol>
-          <li>
-            Get started by editing <code>apps/web/app/page.tsx</code>
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
-
-        <div className={styles.ctas}>
-          <a
-            className={styles.primary}
-            href="https://vercel.com/new/clone?demo-description=Learn+to+implement+a+monorepo+with+a+two+Next.js+sites+that+has+installed+three+local+packages.&demo-image=%2F%2Fimages.ctfassets.net%2Fe5382hct74si%2F4K8ZISWAzJ8X1504ca0zmC%2F0b21a1c6246add355e55816278ef54bc%2FBasic.png&demo-title=Monorepo+with+Turborepo&demo-url=https%3A%2F%2Fexamples-basic-web.vercel.sh%2F&from=templates&project-name=Monorepo+with+Turborepo&repository-name=monorepo-turborepo&repository-url=https%3A%2F%2Fgithub.com%2Fvercel%2Fturborepo%2Ftree%2Fmain%2Fexamples%2Fbasic&root-directory=apps%2Fdocs&skippable-integrations=1&teamSlug=vercel&utm_source=create-turbo"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className={styles.logo}
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            href="https://turborepo.com/docs?utm_source"
-            target="_blank"
-            rel="noopener noreferrer"
-            className={styles.secondary}
-          >
-            Read our docs
-          </a>
+    <div className="min-h-screen bg-black text-white">
+      {/* Header */}
+      <header className="border-b border-slate-800">
+        <div className="container mx-auto px-4 py-4 flex items-center justify-between">
+          <div className="flex items-center space-x-2">
+            <Palette className="h-8 w-8 text-slate-400" />
+            <span className="text-2xl font-bold">Excaliberate</span>
+          </div>
+          <div className="space-x-4">
+            <Link href="/login">
+              <Button variant="ghost" className="text-slate-300 hover:text-white">
+                Sign In
+              </Button>
+            </Link>
+            <Link href="/signup">
+              <Button className="bg-slate-700 hover:bg-slate-600">Get Started</Button>
+            </Link>
+          </div>
         </div>
-        <Button appName="web" className={styles.secondary}>
-          Open alert
-        </Button>
+      </header>
+
+      {/* Hero Section */}
+      <main className="container mx-auto px-4 py-16">
+        <div className="text-center space-y-8">
+          <h1 className="text-5xl md:text-6xl font-bold bg-gradient-to-r from-white to-slate-400 bg-clip-text text-transparent">
+            Draw Together,
+            <br />
+            Create Forever
+          </h1>
+          <p className="text-xl text-slate-400 max-w-2xl mx-auto">
+            Join collaborative drawing rooms where creativity knows no bounds. Sketch, paint, and create amazing artwork
+            with friends and artists worldwide.
+          </p>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <Link href="/signup">
+              <Button size="lg" className="bg-slate-700 hover:bg-slate-600 text-lg px-8">
+                Start Drawing
+              </Button>
+            </Link>
+            <Link href="/login">
+              <Button
+                size="lg"
+                variant="outline"
+                className="border-slate-700 text-slate-300 hover:bg-slate-800 text-lg px-8"
+              >
+                Sign In
+              </Button>
+            </Link>
+          </div>
+        </div>
+
+        {/* Features */}
+        <div className="grid md:grid-cols-3 gap-8 mt-20">
+          <div className="text-center space-y-4">
+            <div className="w-16 h-16 bg-slate-800 rounded-full flex items-center justify-center mx-auto">
+              <Users className="h-8 w-8 text-slate-400" />
+            </div>
+            <h3 className="text-xl font-semibold">Collaborative Rooms</h3>
+            <p className="text-slate-400">Join or create drawing rooms with friends and collaborate in real-time</p>
+          </div>
+          <div className="text-center space-y-4">
+            <div className="w-16 h-16 bg-slate-800 rounded-full flex items-center justify-center mx-auto">
+              <Brush className="h-8 w-8 text-slate-400" />
+            </div>
+            <h3 className="text-xl font-semibold">Professional Tools</h3>
+            <p className="text-slate-400">Access a full suite of drawing tools, brushes, and creative features</p>
+          </div>
+          <div className="text-center space-y-4">
+            <div className="w-16 h-16 bg-slate-800 rounded-full flex items-center justify-center mx-auto">
+              <Sparkles className="h-8 w-8 text-slate-400" />
+            </div>
+            <h3 className="text-xl font-semibold">Endless Creativity</h3>
+            <p className="text-slate-400">Express yourself with unlimited canvas space and creative possibilities</p>
+          </div>
+        </div>
       </main>
-      <footer className={styles.footer}>
-        <a
-          href="https://vercel.com/templates?search=turborepo&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          href="https://turborepo.com?utm_source=create-turbo"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to turborepo.com →
-        </a>
-      </footer>
     </div>
-  );
+  )
 }
