@@ -1,3 +1,9 @@
+import "@repo/auth/nextAuthTypes";
+// or explicitly mention it in tsconfig.json of web
+// "compilerOptions": {
+// "types": ["next-auth", "@repo/auth/types/next-auth"]
+// }
+
 import { Geist, Geist_Mono } from "next/font/google"
 
 import "@repo/ui/globals.css"
