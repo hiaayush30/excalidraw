@@ -12,7 +12,7 @@ import { signOut, useSession } from 'next-auth/react'
 
 function Dashboard() {
     const router = useRouter();
-    const { data: session, status } = useSession();
+    const { data:session, status } = useSession();
     useEffect(() => {
         if (status === 'unauthenticated') {
             // Redirect to login if not authenticated
@@ -59,7 +59,7 @@ function Dashboard() {
                             <span className="text-2xl font-bold">Excaliberate</span>
                         </Link>
                         <div className="flex items-center space-x-4">
-                            <span className="text-slate-400">Welcome {session.user?.name}!</span>
+                            <span className="text-slate-400">Welcome {session.user.name}!</span>
                             <Button variant="ghost" className="text-slate-300 hover:text-slate-700">
                                 Profile
                             </Button>
