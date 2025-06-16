@@ -7,12 +7,19 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Palette } from "lucide-react"
 import axios, { AxiosError } from "axios"
 import { useRouter } from "next/navigation"
+import { useEffect } from "react"
+import { useSession } from "next-auth/react"
 
 export default function SignupPage() {
     const router = useRouter();
-    if (localStorage.getItem("token")) {
-        return router.replace("/dashboard");
-    }
+
+    const { data, status } = useSession();
+
+    useEffect(() => {
+        if (status == "authenticated") {
+            return router.replace("/dashboard");
+        }
+    }, [status, data, router])
     async function handleSignup(formData: FormData) {
         const name = formData.get("name") as string
         const email = formData.get("email") as string

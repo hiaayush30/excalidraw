@@ -6,10 +6,18 @@ import { Label } from "@repo/ui/components/label"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@repo/ui/components/card"
 import { Palette } from "lucide-react"
 import { useRouter } from "next/navigation"
-import { signIn } from "next-auth/react"
+import { signIn, useSession } from "next-auth/react"
+import { useEffect } from "react"
 
 export default function LoginPage() {
     const router = useRouter();
+    const { data, status } = useSession();
+
+    useEffect(() => {
+        if (status == "authenticated") {
+            return router.replace("/dashboard");
+        }
+    }, [status, data, router])
 
     async function handleLogin(formData: FormData) {
 
