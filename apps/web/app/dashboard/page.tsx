@@ -60,7 +60,7 @@ function Dashboard() {
                         </Link>
                         <div className="flex items-center space-x-4">
                             <span className="text-slate-400">Welcome {session.user.name}!</span>
-                            <Button variant="ghost" className="text-slate-300 hover:text-slate-700">
+                            <Button variant="ghost" className="text-slate-300 hover:text-slate-100">
                                 Profile
                             </Button>
                             <Button
@@ -68,7 +68,7 @@ function Dashboard() {
                                     await signOut({ callbackUrl: "/login" });
                                     alert("logged out successfully");
                                 }}
-                                variant="ghost" className="text-slate-300 hover:text-slate-700">
+                                variant="ghost" className="text-slate-300 hover:text-slate-100">
                                 Sign Out
                             </Button>
                         </div>

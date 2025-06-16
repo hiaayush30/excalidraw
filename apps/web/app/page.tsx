@@ -14,12 +14,12 @@ export default function HomePage() {
           </div>
           <div className="space-x-4">
             <Link href="/login">
-              <Button variant="ghost" className="text-slate-300 hover:text-slate-200 hover:text-black">
+              <Button variant="ghost" className="border-slate-700 text-slate-300 hover:text-slate-100">
                 Sign In
               </Button>
             </Link>
             <Link href="/signup">
-              <Button className="bg-slate-700 hover:bg-slate-600">Get Started</Button>
+              <Button className="bg-slate-700 text-slate-200 hover:bg-slate-600">Get Started</Button>
             </Link>
           </div>
         </div>
@@ -38,7 +38,7 @@ export default function HomePage() {
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link href="/signup">
-              <Button size="lg" className="bg-slate-700 hover:bg-slate-600 text-lg px-8">
+              <Button size="lg" className="bg-slate-700 text-slate-200 hover:bg-slate-600 text-lg px-8">
                 Start Drawing
               </Button>
             </Link>
@@ -46,7 +46,7 @@ export default function HomePage() {
               <Button
                 size="lg"
                 variant="outline"
-                className="border-slate-700 text-slate-500 hover:text-slate-200 hover:text-black text-lg px-8"
+                className="border-slate-700 text-slate-400 hover:text-slate-100 text-lg px-8"
               >
                 Sign In
               </Button>
