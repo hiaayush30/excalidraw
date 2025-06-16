@@ -5,14 +5,12 @@ import { Input } from "@repo/ui/components/input"
 import { Label } from "@repo/ui/components/label"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@repo/ui/components/card"
 import { Palette } from "lucide-react"
-import axios, { AxiosError } from "axios"
 import { useRouter } from "next/navigation"
+import { signIn } from "next-auth/react"
 
 export default function LoginPage() {
     const router = useRouter();
-    if (localStorage.getItem("token")) {
-        return router.replace("/dashboard");
-    }
+
     async function handleLogin(formData: FormData) {
 
         const email = formData.get("email") as string
@@ -25,48 +23,19 @@ export default function LoginPage() {
             return;
         }
         try {
-            const response = await axios.post("http://localhost:8000/api/user/login", {
+            const response = await signIn('credentials', {
+                redirect: false,
                 email,
                 password
             });
-            // console.log("Response received:", response); 
-            // console.log("Response headers:", response.headers); 
-
-            const token = response.headers.authorization;
-            if (token) {
-                localStorage.setItem("token", token); // Store the token
-                alert("Login successful! You are now logged in.");
-                router.push("/dashboard");
-            } else {
-                alert("Something went wrong! Please try again later.");
+            if (response?.error) {
+                alert(response.error);
+            } else if (response?.ok) {
+                router.replace("/dashboard");
             }
         } catch (error) {
-            // --- ERROR BLOCK ---
-            if (error instanceof AxiosError) {
-                // AxiosError means it's an HTTP error response from the server (e.g., 400, 401, 409, 500)
-                if (error.response) {
-                    // The request was made and the server responded with a status code
-                    // that falls out of the range of 2xx
-                    const errorMessage = error.response.data?.message || "An error occurred during signup.";
-                    alert(`Error: ${errorMessage}`);
-                    console.error("Signup error response:", error.response.data);
-                    console.error("Status:", error.response.status);
-                    console.error("Headers:", error.response.headers);
-                } else if (error.request) {
-                    // The request was made but no response was received
-                    // `error.request` is an instance of XMLHttpRequest in the browser and http.ClientRequest in node.js
-                    alert("Network Error: No response received. Please check your internet connection or server.");
-                    console.error("Signup network error:", error.request);
-                } else {
-                    // Something happened in setting up the request that triggered an Error
-                    alert("An unexpected error occurred during signup setup.");
-                    console.error("Signup request setup error:", error.message);
-                }
-            } else {
-                // Any other type of error (e.g., a programming error, or a non-Axios error)
-                alert("An unknown error occurred. Please try again.");
-                console.error("Unknown error during signup:", error);
-            }
+            console.log(error);
+            alert("Something went wrong! | Please try again later")
         }
     }
 

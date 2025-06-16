@@ -26,23 +26,13 @@ export default function SignupPage() {
             return;
         }
         try {
-            const response = await axios.post("http://localhost:8000/api/user/signup", {
+            await axios.post("http://localhost:8000/api/user/signup", {
                 name,
                 email,
                 password
             });
-            // console.log("Response received:", response); 
-            // console.log("Response headers:", response.headers); 
-
-            const token = response.headers.authorization;
-            if (token) {
-                localStorage.setItem("token", token); // Store the token
-                alert("Sign up successful! You are now logged in.");
-                router.push("/dashboard");
-            } else {
-                alert("Sign up successful, but no token received. Please try logging in.");
-                router.push("/login");
-            }
+            alert("Signed up successfully!")
+            router.push("/login");
         } catch (error) {
             // --- ERROR BLOCK ---
             if (error instanceof AxiosError) {

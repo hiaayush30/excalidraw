@@ -1,0 +1,22 @@
+{
+  "name": "@repo/auth",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "exports": {
+    "./nextAuth": "./src/index.ts"
+  },
+  "dependencies": {
+    "@repo/db": "workspace:*",
+    "@repo/common": "workspace:*",
+    "@repo/typescript-config": "workspace:*",
+    "bcryptjs": "^3.0.2",
+    "next-auth": "^4.24.11"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
