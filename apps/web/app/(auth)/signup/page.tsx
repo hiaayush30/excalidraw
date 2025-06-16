@@ -9,6 +9,7 @@ import axios, { AxiosError } from "axios"
 import { useRouter } from "next/navigation"
 import { useEffect } from "react"
 import { useSession } from "next-auth/react"
+import { BACKEND_URL } from "@/config"
 
 export default function SignupPage() {
     const router = useRouter();
@@ -33,7 +34,7 @@ export default function SignupPage() {
             return;
         }
         try {
-            await axios.post("http://localhost:8000/api/user/signup", {
+            await axios.post(BACKEND_URL + "/api/user/signup", {
                 name,
                 email,
                 password
@@ -41,6 +42,7 @@ export default function SignupPage() {
             alert("Signed up successfully!")
             router.push("/login");
         } catch (error) {
+            console.log(JSON.stringify(error))
             // --- ERROR BLOCK ---
             if (error instanceof AxiosError) {
                 // AxiosError means it's an HTTP error response from the server (e.g., 400, 401, 409, 500)
