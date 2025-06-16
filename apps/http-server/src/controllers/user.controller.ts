@@ -133,7 +133,7 @@ const getChats = async (req: Request, res: Response): Promise<any> => {
                 createdAt: "desc"   //latest first
                 // the chat messages will be sorted from the latest time they were created to the oldest.             
             },
-            take: 50    
+            take: 50
         })
         return res.status(200).json({
             chats
@@ -146,9 +146,40 @@ const getChats = async (req: Request, res: Response): Promise<any> => {
     }
 }
 
+const getRoomId = async (req: Request, res: Response): Promise<any> => {
+    try {
+        const { slug } = req.params;
+        if (!slug) {
+            return res.status(403).json({
+                error: "Invalid request | slug required"
+            })
+        }
+        const room = await prismaClient.room.findFirst({
+            where: {
+                slug
+            }
+        })
+        if (!room) {
+            return res.status(400).json({
+                error: "room not found"
+            })
+        }
+        return res.status(200).json({
+            roomId: room.id,
+            slug: room.slug
+        })
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({
+            error: "Internal server error"
+        })
+    }
+}
+
 export {
     login,
     signup,
     room,
-    getChats
+    getChats,
+    getRoomId
 }

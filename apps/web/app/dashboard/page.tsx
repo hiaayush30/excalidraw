@@ -49,7 +49,7 @@ function Dashboard() {
                     </Link>
                     <div className="flex items-center space-x-4">
                         <span className="text-slate-400">Welcome back!</span>
-                        <Button variant="ghost" className="text-slate-300 hover:text-white">
+                        <Button variant="ghost" className="text-slate-300 hover:text-slate-700">
                             Profile
                         </Button>
                         <Button
@@ -58,7 +58,7 @@ function Dashboard() {
                                 alert("logged out successfully")
                                 router.push("/login");
                             }}
-                            variant="ghost" className="text-slate-300 hover:text-white">
+                            variant="ghost" className="text-slate-300 hover:text-slate-700">
                             Sign Out
                         </Button>
                     </div>
