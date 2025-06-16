@@ -14,7 +14,7 @@ export default function HomePage() {
           </div>
           <div className="space-x-4">
             <Link href="/login">
-              <Button variant="ghost" className="text-slate-300 hover:text-white">
+              <Button variant="ghost" className="text-slate-300 hover:text-slate-200 hover:text-black">
                 Sign In
               </Button>
             </Link>
@@ -34,8 +34,7 @@ export default function HomePage() {
             Create Forever
           </h1>
           <p className="text-xl text-slate-400 max-w-2xl mx-auto">
-            Join collaborative drawing rooms where creativity knows no bounds. Sketch, paint, and create amazing artwork
-            with friends and artists worldwide.
+            Join collaborative drawing rooms where creativity knows no bounds.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link href="/signup">
@@ -47,7 +46,7 @@ export default function HomePage() {
               <Button
                 size="lg"
                 variant="outline"
-                className="border-slate-700 text-slate-300 hover:bg-slate-800 text-lg px-8"
+                className="border-slate-700 text-slate-500 hover:text-slate-200 hover:text-black text-lg px-8"
               >
                 Sign In
               </Button>

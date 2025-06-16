@@ -1,0 +1,139 @@
+"use client"
+import Link from "next/link"
+import { Button } from "@repo/ui/components/button"
+import { Input } from "@repo/ui/components/input"
+import { Label } from "@repo/ui/components/label"
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@repo/ui/components/card"
+import { Palette } from "lucide-react"
+import axios, { AxiosError } from "axios"
+import { useRouter } from "next/navigation"
+
+export default function LoginPage() {
+    const router = useRouter();
+    if (localStorage.getItem("token")) {
+        return router.replace("/dashboard");
+    }
+    async function handleLogin(formData: FormData) {
+
+        const email = formData.get("email") as string
+        const password = formData.get("password") as string
+
+        // Here you would typically handle the login logic
+        console.log("Login attempt:", { email, password })
+        if (!email || !password) {
+            alert("Please fill all fields!");
+            return;
+        }
+        try {
+            const response = await axios.post("http://localhost:8000/api/user/login", {
+                email,
+                password
+            });
+            // console.log("Response received:", response); 
+            // console.log("Response headers:", response.headers); 
+
+            const token = response.headers.authorization;
+            if (token) {
+                localStorage.setItem("token", token); // Store the token
+                alert("Login successful! You are now logged in.");
+                router.push("/dashboard");
+            } else {
+                alert("Something went wrong! Please try again later.");
+            }
+        } catch (error) {
+            // --- ERROR BLOCK ---
+            if (error instanceof AxiosError) {
+                // AxiosError means it's an HTTP error response from the server (e.g., 400, 401, 409, 500)
+                if (error.response) {
+                    // The request was made and the server responded with a status code
+                    // that falls out of the range of 2xx
+                    const errorMessage = error.response.data?.message || "An error occurred during signup.";
+                    alert(`Error: ${errorMessage}`);
+                    console.error("Signup error response:", error.response.data);
+                    console.error("Status:", error.response.status);
+                    console.error("Headers:", error.response.headers);
+                } else if (error.request) {
+                    // The request was made but no response was received
+                    // `error.request` is an instance of XMLHttpRequest in the browser and http.ClientRequest in node.js
+                    alert("Network Error: No response received. Please check your internet connection or server.");
+                    console.error("Signup network error:", error.request);
+                } else {
+                    // Something happened in setting up the request that triggered an Error
+                    alert("An unexpected error occurred during signup setup.");
+                    console.error("Signup request setup error:", error.message);
+                }
+            } else {
+                // Any other type of error (e.g., a programming error, or a non-Axios error)
+                alert("An unknown error occurred. Please try again.");
+                console.error("Unknown error during signup:", error);
+            }
+        }
+    }
+
+    return (
+        <div className="min-h-screen bg-black flex items-center justify-center p-4">
+            <Card className="w-full max-w-md bg-slate-900 border-slate-800">
+                <CardHeader className="space-y-1 text-center">
+                    <div className="flex items-center justify-center mb-4">
+                        <div className="flex items-center space-x-2">
+                            <Palette className="h-8 w-8 text-slate-400" />
+                            <Link href={"/"}>
+                                <span className="text-2xl font-bold text-white">Excaliberate</span>
+                            </Link>
+                        </div>
+                    </div>
+                    <CardTitle className="text-2xl text-white">Welcome back</CardTitle>
+                    <CardDescription className="text-slate-400">
+                        Sign in to join drawing rooms and create amazing art
+                    </CardDescription>
+                </CardHeader>
+                <form action={handleLogin}>
+                    <CardContent className="space-y-4">
+                        <div className="space-y-2">
+                            <Label htmlFor="email" className="text-slate-200">
+                                Email
+                            </Label>
+                            <Input
+                                id="email"
+                                name="email"
+                                type="email"
+                                placeholder="Enter your email"
+                                required
+                                className="bg-slate-800 border-slate-700 text-white placeholder:text-slate-500 focus:border-slate-600"
+                            />
+                        </div>
+                        <div className="space-y-2">
+                            <Label htmlFor="password" className="text-slate-200">
+                                Password
+                            </Label>
+                            <Input
+                                id="password"
+                                name="password"
+                                type="password"
+                                placeholder="Enter your password"
+                                required
+                                className="bg-slate-800 border-slate-700 text-white placeholder:text-slate-500 focus:border-slate-600"
+                            />
+                        </div>
+                    </CardContent>
+                    <CardFooter className="flex flex-col space-y-4">
+                        <Button type="submit" className="w-full bg-slate-700 hover:bg-slate-600 text-white my-5">
+                            Sign In
+                        </Button>
+                        <div className="text-center text-sm text-slate-400">
+                            {"Don't have an account? "}
+                            <Link href="/signup" className="text-slate-300 hover:text-white underline">
+                                Create one
+                            </Link>
+                        </div>
+                        <div className="text-center">
+                            <Link href="/forgot-password" className="text-sm text-slate-400 hover:text-slate-300 underline">
+                                Forgot your password?
+                            </Link>
+                        </div>
+                    </CardFooter>
+                </form>
+            </Card>
+        </div>
+    )
+}

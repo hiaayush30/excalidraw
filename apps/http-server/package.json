@@ -12,16 +12,18 @@
   "keywords": [],
   "dependencies": {
     "@repo/backend-common": "workspace:*",
+    "@repo/db": "workspace:*",
     "bcryptjs": "^3.0.2",
+    "cors": "^2.8.5",
     "express": "^5.1.0",
-    "jsonwebtoken": "^9.0.2",
-    "@repo/db":"workspace:*"
+    "jsonwebtoken": "^9.0.2"
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
     "@repo/common": "workspace:*",
     "@repo/typescript-config": "workspace:*",
+    "@types/cors": "^2.8.19",
     "@types/express": "^5.0.2",
     "@types/jsonwebtoken": "^9.0.9",
     "nodemon": "^3.1.10",

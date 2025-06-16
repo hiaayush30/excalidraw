@@ -1,6 +1,11 @@
 ![alt text](image.png)
 ![alt text](image-2.png)
 - use workspace:* for pnpm , * for npm in dependencies
+
+### Things to work on
+- rate limiting
+- propagate db through a queue
+- use singletons in ws server
 # Turborepo starter
 
 This Turborepo starter is maintained by the Turborepo core team.
