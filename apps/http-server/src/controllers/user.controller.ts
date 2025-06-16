@@ -27,7 +27,7 @@ const login = async (req: Request, res: Response): Promise<any> => {
                 error: "email or password incorrect"
             })
         }
-        const token = jwt.sign({ userId: existing.id }, JWT_SECRET);
+        const token = jwt.sign({ userId: existing.id }, JWT_SECRET,{expiresIn:"30d"});
         res.setHeader("authorization", token);
         return res.status(200).json({
             message: "signed-in successfully"
@@ -72,8 +72,6 @@ const signup = async (req: Request, res: Response): Promise<any> => {
                 photo: "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png"
             }
         });
-        const token = jwt.sign({ userId: user.id }, JWT_SECRET);
-        res.setHeader("authorization", token);
         res.status(201).json({
             message: "account created successfully"
         })

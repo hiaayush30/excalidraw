@@ -5,7 +5,7 @@
   "main": "index.js",
   "exports": {
     "./nextAuth": "./src/index.ts",
-    "./nextAuthTypes":"./src/types/next-auth.d.ts"
+    "./next-auth-types":"./src/next-auth.d.ts"
   },
   "dependencies": {
     "@repo/db": "workspace:*",
