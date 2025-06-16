@@ -176,10 +176,49 @@ const getRoomId = async (req: Request, res: Response): Promise<any> => {
     }
 }
 
+const getProfile = async (req: Request, res: Response): Promise<any> => {
+    try {
+        const { id } = req.params;
+        if (id) {
+            return res.status(403).json({
+                error: "Invalid request | id required"
+            })
+        }
+        const user = await prismaClient.user.findFirst({
+            where: {
+                id: Number(id)
+            },
+            select: {
+                name: true,
+                id: true,
+                email: true,
+                photo: true
+            }
+        })
+        if (!user) {
+            return res.status(400).json({
+                error: "user not found"
+            })
+        }
+        return res.status(200).json({
+            name: user.name,
+            userId: user.id,
+            email: user.email,
+            photo: user.photo
+        })
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({
+            error: "Internal server error"
+        })
+    }
+}
+
 export {
     login,
     signup,
     room,
     getChats,
-    getRoomId
+    getRoomId,
+    getProfile
 }
