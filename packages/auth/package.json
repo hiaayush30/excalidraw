@@ -5,13 +5,15 @@
   "main": "index.js",
   "exports": {
     "./nextAuth": "./src/index.ts",
-    "./next-auth-types":"./src/next-auth.d.ts"
+    "./next-auth-types": "./src/next-auth.d.ts"
   },
   "dependencies": {
-    "@repo/db": "workspace:*",
     "@repo/common": "workspace:*",
+    "@repo/backend-common": "workspace:*",
+    "@repo/db": "workspace:*",
     "@repo/typescript-config": "workspace:*",
     "bcryptjs": "^3.0.2",
+    "jsonwebtoken": "^9.0.2",
     "next-auth": "^4.24.11"
   },
   "scripts": {
@@ -19,5 +21,8 @@
   },
   "keywords": [],
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "@types/jsonwebtoken": "^9.0.9"
+  }
 }

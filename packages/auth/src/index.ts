@@ -2,8 +2,10 @@ import CredentialsProvider from "next-auth/providers/credentials";
 import bcrypt from "bcryptjs";
 import { NextAuthOptions } from "next-auth";
 import { prismaClient } from "@repo/db/client";
+import jwt from "jsonwebtoken";
+import { JWT_SECRET } from "@repo/backend-common/config";
 
-export const authOptions = (secret:string):NextAuthOptions => {
+export const authOptions = (secret: string): NextAuthOptions => {
     return {
         providers: [
             CredentialsProvider({
@@ -29,11 +31,15 @@ export const authOptions = (secret:string):NextAuthOptions => {
                         if (!verifyPassword) {
                             throw new Error('incorrect password');
                         }
+                        const token = jwt.sign({ userId: user.id }, JWT_SECRET, {
+                            expiresIn: "30d"
+                        })
                         return {
                             id: user.id,
                             email: user.email,
                             photo: user.photo,
-                            name: user.name
+                            name: user.name,
+                            accessToken: token
                         }
                     } catch (error) {
                         console.error('Auth Error', error);
@@ -63,10 +69,15 @@ export const authOptions = (secret:string):NextAuthOptions => {
                         }
                     })
                     if (foundUser) {
-                        token.id = foundUser.id;
+                        const accessToken = jwt.sign({ userId: foundUser.id }, JWT_SECRET, {
+                            expiresIn: "30d"
+                        });
+                        token.id = foundUser.id as number;
                         token.email = foundUser.email;
                         token.photo = foundUser.photo;
                         token.name = foundUser.name;
+                        token.accessToken = accessToken;
+
                     }
                 }
                 return token
@@ -76,6 +87,7 @@ export const authOptions = (secret:string):NextAuthOptions => {
                 session.user.photo = token.photo as string;
                 session.user.email = token.email as string;
                 session.user.name = token.name as string;
+                session.user.accessToken = token.accessToken as string;
                 return session
             }
         },

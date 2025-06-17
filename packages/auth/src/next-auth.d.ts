@@ -9,6 +9,7 @@ declare module "next-auth" {
             email: string;
             photo: string;
             name: string;
+            accessToken:string
         } & DefaultSession['user']; //name, email, image
         // This means the user object in your Session will now have all the default properties plus your
         // custom id, role properties.
