@@ -29,7 +29,7 @@ function Dashboard() {
     async function createRoom(formData: FormData) {
 
         const roomName = formData.get("roomName") as string
-        if(!roomName || roomName.length <=3){
+        if (!roomName || roomName.length <= 3) {
             return alert("room name must be of atleast 3 characters");
         }
 
@@ -56,14 +56,15 @@ function Dashboard() {
     }
 
     async function joinRoom(formData: FormData) {
+        // this roomID is actually the roomName !!
 
         const roomId = formData.get("roomId") as string
 
-        // Here you would typically validate if the room exists
-        console.log("Joining room:", { roomId })
+        if (roomId.length < 3) {
+            return alert("roomId cannot be of less than 3 characters");
+        }
 
-        // Redirect to the drawing room (you'd implement this)
-        // redirect(`/room/${roomId}`)
+        router.push("room/" + roomId);
     }
     if (session) {
         return (
