@@ -61,6 +61,7 @@ export const authOptions = (secret: string): NextAuthOptions => {
                     token.email = user.email;
                     token.photo = user.photo;
                     token.name = user.name
+                    token.accessToken = user.accessToken;
                 }
                 else if (profile) {
                     const foundUser = await prismaClient.user.findFirst({

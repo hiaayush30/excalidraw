@@ -9,6 +9,8 @@ import { Separator } from "@repo/ui/components/separator"
 import { Palette, Plus, Users, ArrowRight } from "lucide-react"
 import Link from "next/link"
 import { signOut, useSession } from 'next-auth/react'
+import axios, { AxiosError } from 'axios'
+import { BACKEND_URL } from '@/config'
 
 function Dashboard() {
     const router = useRouter();
@@ -27,15 +29,30 @@ function Dashboard() {
     async function createRoom(formData: FormData) {
 
         const roomName = formData.get("roomName") as string
+        if(!roomName || roomName.length <=3){
+            return alert("room name must be of atleast 3 characters");
+        }
 
         // Here you would typically create the room in your database
         // and generate a unique room ID
-        const roomId = Math.random().toString(36).substring(2, 8).toUpperCase()
-
-        console.log("Creating room:", { roomName, roomId })
-
-        // Redirect to the drawing room (you'd implement this)
-        // redirect(`/room/${roomId}`)
+        try {
+            console.log(session?.user);
+            await axios.post(BACKEND_URL + "/api/user/room", {
+                name: roomName
+            }, {
+                headers: {
+                    "authorization": session?.user.accessToken
+                }
+            })
+            router.push("/room/" + roomName);
+            alert("room created successfully!");
+        } catch (error) {
+            console.log(error);
+            if (error instanceof AxiosError) {
+                alert(error.toJSON())
+            }
+            alert("Could not create room")
+        }
     }
 
     async function joinRoom(formData: FormData) {

@@ -74,7 +74,10 @@ ws.on("connection", (socket: WebSocket, request) => {
             const user = users.find(user => user.ws == socket);
             if (!user) return socket.send(JSON.stringify({ error: "user not found" }));
             user.rooms.push(data.roomId);
-            socket.send("joined room");
+            console.log("user joined room");
+            socket.send(JSON.stringify({
+                message:"joined room"
+            }));
         }
         else if (data.type == "leave_room") {
             if (!data.roomId) return;
@@ -82,7 +85,9 @@ ws.on("connection", (socket: WebSocket, request) => {
             const user = users.find(user => user.ws == socket);
             if (!user) return socket.send(JSON.stringify({ error: "user not found" }));
             user.rooms = user.rooms.filter(room => room !== data.roomId);
-            socket.send("room left");
+            socket.send(JSON.stringify({
+                message:"room left"
+            }));
         }
 
         else if (data.type == "chat") {
@@ -119,7 +124,9 @@ ws.on("connection", (socket: WebSocket, request) => {
                     }))
                 }
             })
-            socket.send("message sent");
+            socket.send(JSON.stringify({
+                message:"message sent"
+            }));
         }
     })
 

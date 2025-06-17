@@ -21,5 +21,6 @@ declare module "next-auth" {
         email: string;
         photo: string;
         name: string;
+        accessToken:string;
     }
 }
