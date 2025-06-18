@@ -29,14 +29,14 @@ export default async function ChatRoom({
   const session = await getServerSession(authOptions(process.env.NEXTAUTH_SECRET as string));
   if (!session) return redirect('/login');
 
-  const chats = await getChats(roomId, session.user.accessToken);
+  const chats:[] = await getChats(roomId, session.user.accessToken);
 
   return (
     <ChatRoomClient
       roomId={roomId}
       roomName={roomName}
       accessToken={session.user.accessToken}
-      initialChats={chats}
+      initialChats={chats.reverse()}
     />
   );
 }
