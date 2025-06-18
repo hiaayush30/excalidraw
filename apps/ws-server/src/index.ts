@@ -100,8 +100,9 @@ ws.on("connection", (socket: WebSocket, request) => {
                     error: "user not found | room not found"
                 }))
             }
+            let chat;
             try {
-                await prismaClient.chat.create({
+               chat = await prismaClient.chat.create({
                     data: {
                         roomId:Number(data.roomId),
                         userId:Number(user.userId),
@@ -120,7 +121,9 @@ ws.on("connection", (socket: WebSocket, request) => {
                     user.ws.send(JSON.stringify({
                         type: "chat",
                         message: data.message,
-                        roomId: data.roomId
+                        roomId: data.roomId,
+                        userId:user.userId,
+                        chat
                     }))
                 }
             })
