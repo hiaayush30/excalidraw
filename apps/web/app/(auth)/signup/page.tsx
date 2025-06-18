@@ -10,6 +10,7 @@ import { useRouter } from "next/navigation"
 import { useEffect } from "react"
 import { useSession } from "next-auth/react"
 import { BACKEND_URL } from "@/config"
+import { toast } from "sonner"
 
 export default function SignupPage() {
     const router = useRouter();
@@ -30,7 +31,7 @@ export default function SignupPage() {
         console.log("Signup attempt:", { name, email, password })
 
         if (!name || !email || !password) {
-            alert("Please fill all fields!");
+            toast("Please fill all fields!");
             return;
         }
         try {
@@ -39,7 +40,7 @@ export default function SignupPage() {
                 email,
                 password
             });
-            alert("Signed up successfully!")
+            toast("Signed up successfully!")
             router.push("/login");
         } catch (error) {
             console.log(JSON.stringify(error))
@@ -50,23 +51,23 @@ export default function SignupPage() {
                     // The request was made and the server responded with a status code
                     // that falls out of the range of 2xx
                     const errorMessage = error.response.data?.message || "An error occurred during signup.";
-                    alert(`Error: ${errorMessage}`);
+                    toast(`Error: ${errorMessage}`);
                     console.error("Signup error response:", error.response.data);
                     console.error("Status:", error.response.status);
                     console.error("Headers:", error.response.headers);
                 } else if (error.request) {
                     // The request was made but no response was received
                     // `error.request` is an instance of XMLHttpRequest in the browser and http.ClientRequest in node.js
-                    alert("Network Error: No response received. Please check your internet connection or server.");
+                    toast("Network Error: No response received. Please check your internet connection or server.");
                     console.error("Signup network error:", error.request);
                 } else {
                     // Something happened in setting up the request that triggered an Error
-                    alert("An unexpected error occurred during signup setup.");
+                    toast("An unexpected error occurred during signup setup.");
                     console.error("Signup request setup error:", error.message);
                 }
             } else {
                 // Any other type of error (e.g., a programming error, or a non-Axios error)
-                alert("An unknown error occurred. Please try again.");
+                toast("An unknown error occurred. Please try again.");
                 console.error("Unknown error during signup:", error);
             }
         }

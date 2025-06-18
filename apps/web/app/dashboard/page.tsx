@@ -11,6 +11,7 @@ import Link from "next/link"
 import { signOut, useSession } from 'next-auth/react'
 import axios, { AxiosError } from 'axios'
 import { BACKEND_URL } from '@/config'
+import { toast } from 'sonner'
 
 function Dashboard() {
     const router = useRouter();
@@ -30,7 +31,7 @@ function Dashboard() {
 
         const roomName = formData.get("roomName") as string
         if (!roomName || roomName.length <= 3) {
-            return alert("room name must be of atleast 3 characters");
+            toast("room name must be of atleast 3 characters");
         }
 
         // Here you would typically create the room in your database
@@ -45,13 +46,13 @@ function Dashboard() {
                 }
             })
             router.push("/room/" + roomName);
-            alert("room created successfully!");
+            toast("room created successfully!");
         } catch (error) {
             console.log(error);
             if (error instanceof AxiosError) {
-                alert(error.toJSON())
+                console.log(error.toJSON())
             }
-            alert("Could not create room")
+            toast("Could not create room")
         }
     }
 
@@ -61,7 +62,7 @@ function Dashboard() {
         const roomId = formData.get("roomId") as string
 
         if (roomId.length < 3) {
-            return alert("roomId cannot be of less than 3 characters");
+            toast("roomId cannot be of less than 3 characters");
         }
 
         router.push("room/" + roomId);
@@ -84,7 +85,7 @@ function Dashboard() {
                             <Button
                                 onClick={async () => {
                                     await signOut({ callbackUrl: "/login" });
-                                    alert("logged out successfully");
+                                    toast("logged out successfully");
                                 }}
                                 variant="ghost" className="text-slate-300 hover:text-slate-100">
                                 Sign Out

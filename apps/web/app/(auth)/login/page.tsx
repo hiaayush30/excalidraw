@@ -8,6 +8,7 @@ import { Palette } from "lucide-react"
 import { useRouter } from "next/navigation"
 import { signIn, useSession } from "next-auth/react"
 import { useEffect } from "react"
+import { toast } from "sonner"
 
 export default function LoginPage() {
     const router = useRouter();
@@ -27,7 +28,7 @@ export default function LoginPage() {
         // Here you would typically handle the login logic
         console.log("Login attempt:", { email, password })
         if (!email || !password) {
-            alert("Please fill all fields!");
+            toast("Please fill all fields!");
             return;
         }
         try {
@@ -37,13 +38,13 @@ export default function LoginPage() {
                 password
             });
             if (response?.error) {
-                alert(response.error);
+                toast(response.error);
             } else if (response?.ok) {
                 router.replace("/dashboard");
             }
         } catch (error) {
             console.log(error);
-            alert("Something went wrong! | Please try again later")
+            toast("Something went wrong! | Please try again later")
         }
     }
 
