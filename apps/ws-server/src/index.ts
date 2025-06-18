@@ -131,6 +131,7 @@ ws.on("connection", (socket: WebSocket, request) => {
     })
 
     socket.on("close", () => {
+        console.log("client disconnected");
         users = users.filter(user => user.userId !== userId)
     })
 })

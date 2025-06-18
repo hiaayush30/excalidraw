@@ -1,4 +1,4 @@
-import ChatRoom from '@/components/chatRoom';
+import ChatRoom from '@/components/ChatRoom';
 import { BACKEND_URL, WS_URL } from '@/config';
 import { authOptions } from '@repo/auth/nextAuth';
 import axios from 'axios';
